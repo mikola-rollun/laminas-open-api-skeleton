@@ -13,7 +13,9 @@ services:
       - php-fpm
 
   php-fpm:
-    image: maxrollundev/php-fpm-dev-8.0
+    build:
+      context: docker/php
+      dockerfile: Dockerfile
     volumes:
       - ./:/var/www/app
     environment:

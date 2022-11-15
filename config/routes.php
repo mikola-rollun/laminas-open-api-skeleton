@@ -64,4 +64,12 @@ return function (Application $app, MiddlewareFactory $factory, ContainerInterfac
         Route::HTTP_METHOD_ANY,
         'webhook'
     );
+
+    $app->route(
+        (getEnv("OPEN_API_PREFIX") ?: '/api') . '[/{any:.*}]',
+        // App\Handler\HomePageHandler::class,
+        \OpenAPI\Middleware\APIMiddleware::class,
+        Route::HTTP_METHOD_ANY,
+        \OpenAPI\Middleware\APIMiddleware::class
+    );
 };
