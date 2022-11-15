@@ -32,12 +32,8 @@ class APIMiddleware implements MiddlewareInterface
             new ManifestResolver(),
             new PopulateDTO(),
             new HandleController($this->container),
-            new ResponseGenerator(),
+            // new ResponseGenerator(), //TODO
             new ResponseValidator(),
-            // new GetParamsResolver(),
-            // new PostParamsResolver(),
-            // $metricMiddleware,
-            // $interrupterMiddleware,
         ]);
 
         foreach ($middlewares as $middleware) {

@@ -18,6 +18,17 @@ class ResponseGenerator implements MiddlewareInterface
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $response = $request->getAttribute(HandleController::OPEN_API_CONTROLLER_RESPONSE);
-        
+        $accepts = $request->getHeader("accept");
+        if (isset($accept[0])) {
+            $accepts = explode(",", $accept[0]);
+            foreach ($accepts as $accept) {
+                switch ($accept) {
+                    case "application/json":
+                        
+                    case "application/xml":
+                    case "application/x-yaml":
+                }
+            }
+        }
     }
 }

@@ -18,5 +18,17 @@ class ResponseValidator implements MiddlewareInterface
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
+        $response = $request->getAttribute(HandleController::OPEN_API_CONTROLLER_RESPONSE);
+
+        $file = $request->getAttribute(ManifestResolver::OPEN_API_MANIFEST_FILE_PATH);
+        $validator = (new \League\OpenAPIValidation\PSR7\ValidatorBuilder)->fromYamlFile($file)->getResponseValidator();
+        $match = $request->getAttribute(ManifestResolver::OPEN_API_MANIFEST_DATA_MATCH);
+        $operation = new \League\OpenAPIValidation\PSR7\OperationAddress($match->path(), $match->method()) ;
+        try {
+            $valid = $validator->validate($operation, $response);
+        } catch (\Exception $ex) {
+
+        }
+        return $response;
     }
 }

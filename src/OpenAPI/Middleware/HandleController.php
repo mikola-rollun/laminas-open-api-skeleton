@@ -42,13 +42,14 @@ class HandleController implements MiddlewareInterface {
         if (!method_exists($controller, $operationId)) {
             throw new \Exception("Unable to call " . $path . " (" . $operationId . ")");   
         }
-        // $reflectionClass = new \ReflectionClass($controller);
-        // $returnType = $reflectionClass->getMethod($operationId)->getReturnType();
-        // if ($returnType != ResponseInterface::class) {
-        //     throw new \Exception("The controller doesn't meet response schema (Psr\Http\Message\ResponseInterface)");
-        // }
-        // $response = $controller->{$operationId}($request, $request->getAttribute(PopulateDTO::OPEN_API_DTO_MODEL));
-        // $request = $request->withAttribute(self::OPEN_API_CONTROLLER_RESPONSE, $response);
+        $reflectionClass = new \ReflectionClass($controller);
+        $returnType = $reflectionClass->getMethod($operationId)->getReturnType();
+        if ($returnType != \Laminas\Diactoros\Response\JsonResponse::class) {
+            // throw new \Exception("The controller doesn't meet response schema (Psr\Http\Message\ResponseInterface)");
+            throw new \Exception("The controller doesn't meet response schema (\Laminas\Diactoros\Response\JsonResponse)");
+        }
+        $response = $controller->{$operationId}($request, $request->getAttribute(PopulateDTO::OPEN_API_DTO_MODEL));
+        $request = $request->withAttribute(self::OPEN_API_CONTROLLER_RESPONSE, $response);
         return $handler->handle($request);
     }
 }
